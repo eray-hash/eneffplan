@@ -1,4 +1,4 @@
-import { Card, CardHeader } from '../components/ui/Card'
+import { Card } from '../components/ui/Card'
 import { employees } from '../data/mockData'
 
 const currency = (n: number) => n.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
@@ -37,7 +37,7 @@ export function Mitarbeiter() {
                 <td className="px-5 py-3.5 text-slate-600 dark:text-slate-300">{currency(e.hourlyCostRate)} / h</td>
                 <td className="px-5 py-3.5 text-slate-600 dark:text-slate-300">{currency(e.hourlySellRate)} / h</td>
                 <td className="px-5 py-3.5 text-right">
-                  <button className="text-xs font-medium text-emerald-700 hover:underline">Bearbeiten</button>
+                  <button className="text-xs font-medium text-brand-700 hover:underline">Bearbeiten</button>
                 </td>
               </tr>
             ))}

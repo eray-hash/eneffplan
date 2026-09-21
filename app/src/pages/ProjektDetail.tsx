@@ -30,7 +30,7 @@ export function ProjektDetail() {
     return (
       <div>
         <p className="text-sm text-slate-500">Projekt nicht gefunden.</p>
-        <Link to="/projekte" className="text-sm text-emerald-700">
+        <Link to="/projekte" className="text-sm text-brand-700">
           Zurück zur Übersicht
         </Link>
       </div>
@@ -96,7 +96,7 @@ export function ProjektDetail() {
                       })}
                     </ul>
                     {allDone && m.status !== 'bezahlt' && m.status !== 'rechnung_gestellt' && (
-                      <button className="mt-3 w-full rounded-md bg-emerald-600 py-2 text-xs font-medium text-white hover:bg-emerald-700">
+                      <button className="mt-3 w-full rounded-md bg-brand-600 py-2 text-xs font-medium text-white hover:bg-brand-700">
                         Alle Aufgaben erledigt — Rechnung freigeben ({m.invoicePercent}%)
                       </button>
                     )}
@@ -148,7 +148,7 @@ export function ProjektDetail() {
                 </div>
                 <div className="flex justify-between border-t border-slate-100 pt-2 dark:border-slate-800">
                   <dt className="text-slate-500">Marge</dt>
-                  <dd className={`font-semibold ${margin.marginPercent >= 20 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                  <dd className={`font-semibold ${margin.marginPercent >= 20 ? 'text-brand-600' : 'text-amber-600'}`}>
                     {currency(margin.margin)} ({margin.marginPercent}%)
                   </dd>
                 </div>

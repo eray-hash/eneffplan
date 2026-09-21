@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom'
 import { Badge } from '../components/ui/Badge'
 import { Card, CardHeader } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { useRole } from '../context/RoleContext'
+import { useTracking } from '../context/TrackingContext'
 import { employees, invoices, milestones, projects, tasks } from '../data/mockData'
 
 const currency = (n: number) => n.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
@@ -28,7 +30,7 @@ function GeschaeftsfuehrungDashboard() {
         </Card>
         <Card>
           <div className="text-xs font-medium text-slate-500">Meilensteine bereit zur Abrechnung</div>
-          <div className="mt-2 text-2xl font-semibold text-emerald-600">{dueMilestones.length}</div>
+          <div className="mt-2 text-2xl font-semibold text-brand-600">{dueMilestones.length}</div>
           <div className="mt-1 text-xs text-slate-400">Aufgaben erledigt, Rechnung noch nicht gestellt</div>
         </Card>
         <Card>
@@ -48,14 +50,14 @@ function GeschaeftsfuehrungDashboard() {
             {dueMilestones.map((m) => {
               const project = projects.find((p) => p.id === m.projectId)!
               return (
-                <li key={m.id} className="flex items-center justify-between rounded-lg bg-emerald-50 px-3 py-2.5 dark:bg-emerald-900/20">
+                <li key={m.id} className="flex items-center justify-between rounded-lg bg-brand-50 px-3 py-2.5 dark:bg-brand-900/20">
                   <div>
                     <div className="text-sm font-medium text-slate-800 dark:text-slate-100">
                       #{project.number} · {m.title}
                     </div>
                     <div className="text-xs text-slate-500">{project.customerName}</div>
                   </div>
-                  <button className="rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-700">
+                  <button className="rounded-md bg-brand-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-700">
                     Rechnung erstellen ({m.invoicePercent}%)
                   </button>
                 </li>
@@ -117,18 +119,32 @@ function MitarbeiterDashboard() {
   const me = employees[0]
   const myTasks = tasks.filter((t) => t.assigneeId === me.id)
   const openTasks = myTasks.filter((t) => t.status !== 'erledigt')
+  const { clockState, activeTaskId, clockIn } = useTracking()
+  const activeTask = tasks.find((t) => t.id === activeTaskId)
 
   return (
     <div className="space-y-6">
-      <Card className="bg-emerald-600 text-white">
+      <Card className="bg-brand-600 text-white">
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-sm text-emerald-100">Guten Tag, {me.name.split(' ')[0]}</div>
-            <div className="mt-1 text-lg font-semibold">Du bist aktuell nicht eingestempelt</div>
+            <div className="text-sm text-brand-100">Guten Tag, {me.name.split(' ')[0]}</div>
+            <div className="mt-1 text-lg font-semibold">
+              {clockState === 'gestoppt'
+                ? 'Du bist aktuell nicht eingestempelt'
+                : activeTask
+                  ? `Aktiv: ${activeTask.title}`
+                  : 'Eingestempelt · bucht auf Intern'}
+            </div>
           </div>
-          <button className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-50">
-            Einstempeln
-          </button>
+          {clockState === 'gestoppt' ? (
+            <button onClick={clockIn} className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-50">
+              Einstempeln
+            </button>
+          ) : (
+            <Link to="/kanban" className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-50">
+              Zum Kanban-Board
+            </Link>
+          )}
         </div>
       </Card>
 

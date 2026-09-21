@@ -58,7 +58,7 @@ export interface Project {
 export const employees: Employee[] = [
   { id: 'e1', name: 'Selin Aydın', initials: 'SA', color: 'bg-violet-500', hourlyCostRate: 45, hourlySellRate: 95, weeklyHours: 40 },
   { id: 'e2', name: 'Jonas Weber', initials: 'JW', color: 'bg-sky-500', hourlyCostRate: 38, hourlySellRate: 85, weeklyHours: 32 },
-  { id: 'e3', name: 'Büşra Kaya', initials: 'BK', color: 'bg-emerald-500', hourlyCostRate: 42, hourlySellRate: 90, weeklyHours: 40 },
+  { id: 'e3', name: 'Büşra Kaya', initials: 'BK', color: 'bg-brand-500', hourlyCostRate: 42, hourlySellRate: 90, weeklyHours: 40 },
   { id: 'e4', name: 'Steffi Bauer', initials: 'SB', color: 'bg-amber-500', hourlyCostRate: 30, hourlySellRate: 75, weeklyHours: 24 },
   { id: 'e5', name: 'Mehmet Öztürk', initials: 'MÖ', color: 'bg-rose-500', hourlyCostRate: 40, hourlySellRate: 88, weeklyHours: 40 },
 ]

@@ -2,7 +2,7 @@ export function ProgressBar({ value, tone = 'blue' }: { value: number; tone?: 'b
   const clamped = Math.max(0, Math.min(100, value))
   const toneClasses = {
     blue: 'bg-sky-500',
-    green: 'bg-emerald-500',
+    green: 'bg-brand-500',
     amber: 'bg-amber-500',
     red: 'bg-rose-500',
   }

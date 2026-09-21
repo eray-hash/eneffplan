@@ -31,7 +31,7 @@ export function Controlling() {
         </Card>
         <Card>
           <div className="text-xs font-medium text-slate-500">Marge (bisher)</div>
-          <div className="mt-2 text-2xl font-semibold text-emerald-600">{currency(totalMargin)}</div>
+          <div className="mt-2 text-2xl font-semibold text-brand-600">{currency(totalMargin)}</div>
         </Card>
       </div>
 
@@ -55,7 +55,7 @@ export function Controlling() {
                     <td className="py-2 text-slate-700 dark:text-slate-200">#{p.number}</td>
                     <td className="py-2 text-slate-500">{currency(p.offerAmount)}</td>
                     <td className="py-2 text-slate-500">{currency(m.cost)}</td>
-                    <td className={`py-2 font-medium ${m.marginPercent >= 20 ? 'text-emerald-600' : 'text-amber-600'}`}>{m.marginPercent}%</td>
+                    <td className={`py-2 font-medium ${m.marginPercent >= 20 ? 'text-brand-600' : 'text-amber-600'}`}>{m.marginPercent}%</td>
                   </tr>
                 )
               })}
@@ -73,7 +73,7 @@ export function Controlling() {
                   <span className="font-medium text-slate-800 dark:text-slate-100">{currency(p.amount)}</span>
                 </div>
                 <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-                  <div className="h-full rounded-full bg-emerald-500" style={{ width: `${(p.amount / maxPipeline) * 100}%` }} />
+                  <div className="h-full rounded-full bg-brand-500" style={{ width: `${(p.amount / maxPipeline) * 100}%` }} />
                 </div>
               </div>
             ))}

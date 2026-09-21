@@ -45,7 +45,7 @@ export function Projekte() {
             onClick={() => setFilter(f.key)}
             className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
               filter === f.key
-                ? 'bg-emerald-600 text-white'
+                ? 'bg-brand-600 text-white'
                 : 'bg-white text-slate-600 hover:bg-slate-100 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800'
             }`}
           >
@@ -73,7 +73,7 @@ export function Projekte() {
               return (
                 <tr key={p.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/50">
                   <td className="px-5 py-3.5">
-                    <Link to={`/projekte/${p.id}`} className="font-medium text-slate-800 hover:text-emerald-700 dark:text-slate-100">
+                    <Link to={`/projekte/${p.id}`} className="font-medium text-slate-800 hover:text-brand-700 dark:text-slate-100">
                       #{p.number} · {p.customerName}
                     </Link>
                     <div className="text-xs text-slate-400">{p.title}</div>
