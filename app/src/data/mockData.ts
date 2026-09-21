@@ -152,23 +152,149 @@ export const milestones: Milestone[] = [
 ]
 
 export const tasks: SubTask[] = [
-  { id: 't1', projectId: 'p260', title: 'Gebäudemodell (3D) aufbauen', assigneeId: 'e1', milestoneId: 'm260-2', budgetHours: 40, usedHours: 40, status: 'erledigt' },
-  { id: 't2', projectId: 'p260', title: 'U-Werte / Bauteile erfassen', assigneeId: 'e1', milestoneId: 'm260-2', budgetHours: 20, usedHours: 22, status: 'erledigt' },
-  { id: 't3', projectId: 'p260', title: 'Wärmeschutzberechnung DIN 4108', assigneeId: 'e3', milestoneId: 'm260-2', budgetHours: 30, usedHours: 18, status: 'in_bearbeitung' },
-  { id: 't4', projectId: 'p260', title: 'Bericht + Prüfung erstellen', assigneeId: 'e3', milestoneId: 'm260-2', budgetHours: 20, usedHours: 0, status: 'offen' },
-  { id: 't5', projectId: 'p260', title: 'Schlussdokumentation zusammenstellen', assigneeId: 'e1', milestoneId: 'm260-3', budgetHours: 15, usedHours: 0, status: 'offen' },
+  {
+    id: 't1',
+    projectId: 'p260',
+    title: 'Gebäudemodell (3D) aufbauen',
+    assigneeId: 'e1',
+    milestoneId: 'm260-2',
+    budgetHours: 40,
+    usedHours: 40,
+    status: 'erledigt',
+  },
+  {
+    id: 't2',
+    projectId: 'p260',
+    title: 'U-Werte / Bauteile erfassen',
+    assigneeId: 'e1',
+    milestoneId: 'm260-2',
+    budgetHours: 20,
+    usedHours: 22,
+    status: 'erledigt',
+  },
+  {
+    id: 't3',
+    projectId: 'p260',
+    title: 'Wärmeschutzberechnung DIN 4108',
+    assigneeId: 'e3',
+    milestoneId: 'm260-2',
+    budgetHours: 30,
+    usedHours: 18,
+    status: 'in_bearbeitung',
+  },
+  {
+    id: 't4',
+    projectId: 'p260',
+    title: 'Bericht + Prüfung erstellen',
+    assigneeId: 'e3',
+    milestoneId: 'm260-2',
+    budgetHours: 20,
+    usedHours: 0,
+    status: 'offen',
+  },
+  {
+    id: 't5',
+    projectId: 'p260',
+    title: 'Schlussdokumentation zusammenstellen',
+    assigneeId: 'e1',
+    milestoneId: 'm260-3',
+    budgetHours: 15,
+    usedHours: 0,
+    status: 'offen',
+  },
 
-  { id: 't6', projectId: 'p238', title: 'Gebäudesimulation Modell erstellen', assigneeId: 'e5', milestoneId: 'm238-1', budgetHours: 60, usedHours: 58, status: 'erledigt' },
-  { id: 't7', projectId: 'p238', title: 'BAFA-Vollmacht einholen', assigneeId: 'e2', milestoneId: 'm238-2', budgetHours: 4, usedHours: 4, status: 'erledigt' },
-  { id: 't8', projectId: 'p238', title: 'Förderantrag ausarbeiten', assigneeId: 'e2', milestoneId: 'm238-2', budgetHours: 35, usedHours: 21, status: 'in_bearbeitung' },
+  {
+    id: 't6',
+    projectId: 'p238',
+    title: 'Gebäudesimulation Modell erstellen',
+    assigneeId: 'e5',
+    milestoneId: 'm238-1',
+    budgetHours: 60,
+    usedHours: 58,
+    status: 'erledigt',
+  },
+  {
+    id: 't7',
+    projectId: 'p238',
+    title: 'BAFA-Vollmacht einholen',
+    assigneeId: 'e2',
+    milestoneId: 'm238-2',
+    budgetHours: 4,
+    usedHours: 4,
+    status: 'erledigt',
+  },
+  {
+    id: 't8',
+    projectId: 'p238',
+    title: 'Förderantrag ausarbeiten',
+    assigneeId: 'e2',
+    milestoneId: 'm238-2',
+    budgetHours: 35,
+    usedHours: 21,
+    status: 'in_bearbeitung',
+  },
 
-  { id: 't9', projectId: 'p255', title: 'Bestandsdaten erfassen', assigneeId: 'e4', milestoneId: 'm255-1', budgetHours: 25, usedHours: 27, status: 'erledigt' },
-  { id: 't10', projectId: 'p255', title: 'Maßnahmenkatalog erarbeiten', assigneeId: 'e4', milestoneId: 'm255-2', budgetHours: 45, usedHours: 30, status: 'in_bearbeitung' },
+  {
+    id: 't9',
+    projectId: 'p255',
+    title: 'Bestandsdaten erfassen',
+    assigneeId: 'e4',
+    milestoneId: 'm255-1',
+    budgetHours: 25,
+    usedHours: 27,
+    status: 'erledigt',
+  },
+  {
+    id: 't10',
+    projectId: 'p255',
+    title: 'Maßnahmenkatalog erarbeiten',
+    assigneeId: 'e4',
+    milestoneId: 'm255-2',
+    budgetHours: 45,
+    usedHours: 30,
+    status: 'in_bearbeitung',
+  },
 
-  { id: 't11', projectId: 'p244', title: 'Bestandsaufnahme vor Ort', assigneeId: 'e2', milestoneId: 'm244-1', budgetHours: 32, usedHours: 34, status: 'erledigt' },
-  { id: 't12', projectId: 'p251', title: 'Wärmeschutzberechnung', assigneeId: 'e3', milestoneId: 'm251-1', budgetHours: 40, usedHours: 41, status: 'erledigt' },
-  { id: 't13', projectId: 'p251', title: 'Bericht erstellen', assigneeId: 'e3', milestoneId: 'm251-1', budgetHours: 15, usedHours: 16, status: 'erledigt' },
-  { id: 't14', projectId: 'p219', title: 'Erstaufnahme Gebäudedaten', assigneeId: 'e4', milestoneId: 'm219-1', budgetHours: 10, usedHours: 10, status: 'erledigt' },
+  {
+    id: 't11',
+    projectId: 'p244',
+    title: 'Bestandsaufnahme vor Ort',
+    assigneeId: 'e2',
+    milestoneId: 'm244-1',
+    budgetHours: 32,
+    usedHours: 34,
+    status: 'erledigt',
+  },
+  {
+    id: 't12',
+    projectId: 'p251',
+    title: 'Wärmeschutzberechnung',
+    assigneeId: 'e3',
+    milestoneId: 'm251-1',
+    budgetHours: 40,
+    usedHours: 41,
+    status: 'erledigt',
+  },
+  {
+    id: 't13',
+    projectId: 'p251',
+    title: 'Bericht erstellen',
+    assigneeId: 'e3',
+    milestoneId: 'm251-1',
+    budgetHours: 15,
+    usedHours: 16,
+    status: 'erledigt',
+  },
+  {
+    id: 't14',
+    projectId: 'p219',
+    title: 'Erstaufnahme Gebäudedaten',
+    assigneeId: 'e4',
+    milestoneId: 'm219-1',
+    budgetHours: 10,
+    usedHours: 10,
+    status: 'erledigt',
+  },
 ]
 
 export const invoices: Invoice[] = [
@@ -178,6 +304,28 @@ export const invoices: Invoice[] = [
   { id: 'i4', projectId: 'p251', milestoneId: 'm260-1', amount: 6400, status: 'bezahlt', issuedOn: '2026-08-11', dueOn: '2026-08-25' },
   { id: 'i5', projectId: 'p219', milestoneId: 'm260-1', amount: 5200, status: 'mahnung_3', issuedOn: '2026-05-02', dueOn: '2026-05-16' },
 ]
+
+export type AbsenceType = 'urlaub' | 'krank' | 'sonderurlaub'
+
+export interface Absence {
+  id: string
+  employeeId: string
+  from: string
+  to: string
+  type: AbsenceType
+}
+
+export const absences: Absence[] = [
+  { id: 'a1', employeeId: 'e1', from: '2026-09-28', to: '2026-10-02', type: 'urlaub' },
+  { id: 'a2', employeeId: 'e3', from: '2026-09-22', to: '2026-09-22', type: 'krank' },
+  { id: 'a3', employeeId: 'e5', from: '2026-10-05', to: '2026-10-09', type: 'urlaub' },
+]
+
+export function remainingHours(employeeId: string) {
+  return tasks
+    .filter((t) => t.assigneeId === employeeId && t.status !== 'erledigt')
+    .reduce((sum, t) => sum + Math.max(0, t.budgetHours - t.usedHours), 0)
+}
 
 export function projectProgress(projectId: string) {
   const ms = milestones.filter((m) => m.projectId === projectId)

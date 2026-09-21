@@ -26,17 +26,19 @@ export function Rechnungen() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Angebote &amp; Rechnungen</h1>
-      <p className="mb-6 mt-1 text-sm text-slate-500">Löst Lexware ab: Angebotserstellung, Rechnungsstellung und automatisches Mahnwesen an einem Ort.</p>
+      <h1 className="text-xl font-semibold text-slate-900">Angebote &amp; Rechnungen</h1>
+      <p className="mb-6 mt-1 text-sm text-slate-500">
+        Löst Lexware ab: Angebotserstellung, Rechnungsstellung und automatisches Mahnwesen an einem Ort.
+      </p>
 
       {overdue.length > 0 && (
-        <Card className="mb-6 border-rose-200 bg-rose-50 dark:border-rose-900 dark:bg-rose-950/30">
+        <Card className="mb-6 border-rose-200 bg-rose-50">
           <CardHeader title="Mahnwesen — Zahlungsverzug" subtitle="Automatisch anhand Fälligkeitsdatum und Bankabgleich eskaliert" />
           <ul className="space-y-2">
             {overdue.map((inv) => {
               const project = projects.find((p) => p.id === inv.projectId)!
               return (
-                <li key={inv.id} className="flex items-center justify-between rounded-lg bg-white px-3.5 py-2.5 text-sm dark:bg-slate-900">
+                <li key={inv.id} className="flex items-center justify-between rounded-lg bg-white px-3.5 py-2.5 text-sm">
                   <span>
                     #{project.number} · {project.customerName} — {currency(inv.amount)}, fällig seit {inv.dueOn}
                   </span>
@@ -56,7 +58,7 @@ export function Rechnungen() {
       <Card className="p-0">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-slate-400 dark:border-slate-800">
+            <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-slate-400">
               <th className="px-5 py-3 font-medium">Projekt</th>
               <th className="px-5 py-3 font-medium">Betrag</th>
               <th className="px-5 py-3 font-medium">Versendet</th>
@@ -68,11 +70,11 @@ export function Rechnungen() {
             {invoices.map((inv) => {
               const project = projects.find((p) => p.id === inv.projectId)!
               return (
-                <tr key={inv.id} className="border-b border-slate-50 last:border-0 dark:border-slate-800">
-                  <td className="px-5 py-3.5 font-medium text-slate-800 dark:text-slate-100">
+                <tr key={inv.id} className="border-b border-slate-50 last:border-0">
+                  <td className="px-5 py-3.5 font-medium text-slate-800">
                     #{project.number} · {project.customerName}
                   </td>
-                  <td className="px-5 py-3.5 text-slate-600 dark:text-slate-300">{currency(inv.amount)}</td>
+                  <td className="px-5 py-3.5 text-slate-600">{currency(inv.amount)}</td>
                   <td className="px-5 py-3.5 text-slate-500">{inv.issuedOn}</td>
                   <td className="px-5 py-3.5 text-slate-500">{inv.dueOn}</td>
                   <td className="px-5 py-3.5">

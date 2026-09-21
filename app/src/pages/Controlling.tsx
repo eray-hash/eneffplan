@@ -17,17 +17,17 @@ export function Controlling() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Controlling</h1>
+      <h1 className="text-xl font-semibold text-slate-900">Controlling</h1>
       <p className="mb-6 mt-1 text-sm text-slate-500">Ersetzt die zwei Excel-Tabellen — Kosten, Marge und Pipeline auf einen Blick.</p>
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card>
           <div className="text-xs font-medium text-slate-500">Angebotsvolumen (alle Projekte)</div>
-          <div className="mt-2 text-2xl font-semibold text-slate-900 dark:text-slate-100">{currency(totalOffer)}</div>
+          <div className="mt-2 text-2xl font-semibold text-slate-900">{currency(totalOffer)}</div>
         </Card>
         <Card>
           <div className="text-xs font-medium text-slate-500">Interne Kosten (bisher)</div>
-          <div className="mt-2 text-2xl font-semibold text-slate-900 dark:text-slate-100">{currency(totalCost)}</div>
+          <div className="mt-2 text-2xl font-semibold text-slate-900">{currency(totalCost)}</div>
         </Card>
         <Card>
           <div className="text-xs font-medium text-slate-500">Marge (bisher)</div>
@@ -51,11 +51,13 @@ export function Controlling() {
               {projects.map((p) => {
                 const m = projectMargin(p)
                 return (
-                  <tr key={p.id} className="border-t border-slate-50 dark:border-slate-800">
-                    <td className="py-2 text-slate-700 dark:text-slate-200">#{p.number}</td>
+                  <tr key={p.id} className="border-t border-slate-50">
+                    <td className="py-2 text-slate-700">#{p.number}</td>
                     <td className="py-2 text-slate-500">{currency(p.offerAmount)}</td>
                     <td className="py-2 text-slate-500">{currency(m.cost)}</td>
-                    <td className={`py-2 font-medium ${m.marginPercent >= 20 ? 'text-brand-600' : 'text-amber-600'}`}>{m.marginPercent}%</td>
+                    <td className={`py-2 font-medium ${m.marginPercent >= 20 ? 'text-brand-600' : 'text-amber-600'}`}>
+                      {m.marginPercent}%
+                    </td>
                   </tr>
                 )
               })}
@@ -69,10 +71,10 @@ export function Controlling() {
             {pipeline.map((p) => (
               <div key={p.quartal}>
                 <div className="mb-1 flex justify-between text-sm">
-                  <span className="text-slate-600 dark:text-slate-300">{p.quartal}</span>
-                  <span className="font-medium text-slate-800 dark:text-slate-100">{currency(p.amount)}</span>
+                  <span className="text-slate-600">{p.quartal}</span>
+                  <span className="font-medium text-slate-800">{currency(p.amount)}</span>
                 </div>
-                <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
                   <div className="h-full rounded-full bg-brand-500" style={{ width: `${(p.amount / maxPipeline) * 100}%` }} />
                 </div>
               </div>

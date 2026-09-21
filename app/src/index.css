@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Eneffplan Corporate Identity — abgeleitet von eneffplan.com (Button-/Akzentfarben) */
 @theme {
@@ -12,11 +12,10 @@
   --color-brand-700: #0a6543;
   --color-brand-800: #085038;
   --color-brand-900: #06301f;
-  --color-ink: #0a182e;
 }
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
 html,

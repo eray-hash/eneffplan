@@ -7,7 +7,7 @@ export function ProgressBar({ value, tone = 'blue' }: { value: number; tone?: 'b
     red: 'bg-rose-500',
   }
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+    <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
       <div className={`h-full rounded-full ${toneClasses[tone]}`} style={{ width: `${clamped}%` }} />
     </div>
   )
