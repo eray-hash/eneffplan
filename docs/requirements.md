@@ -100,7 +100,7 @@ Insgesamt also 5 Systeme, die im Zielbild vollständig im neuen CRM aufgehen: Cr
 
 ### 4.10 Explizit NICHT gewünscht
 - Keine KI, die Telefonate/Meetings mitschneidet oder E-Mails automatisch zusammenfasst – bewusste Entscheidung des Kunden, eigene Notizen werden bevorzugt.
-- Sprachassistent-Feature ("Jarvis"-artig: Projektstatus per Sprache abfragen, Aufgaben per Sprachbefehl verteilen) wurde nur als mögliches Zusatzfeature erwähnt, **nicht** als Kernanforderung – niedrige Priorität, allenfalls später.
+- Sprachassistent-Feature ("Jarvis"-artig: Projektstatus per Sprache abfragen, Aufgaben per Sprachbefehl verteilen) **ist explizit nicht Teil des ersten Bauabschnitts** (Entscheidung 2026-09-21). Es taucht im Angebot für den Kunden nur als optionaler Zusatzposten auf, nicht als Teil der Kernkalkulation/des Kernaufwands.
 - Kein Leistungsverzeichnis-Modul nötig (Kunde arbeitet nicht mit klassischen LVs, sondern individuellen Angeboten je Bauvorhaben).
 - Keine automatische Stundenschätzung/Konfigurator für Angebote (z. B. nach Gebäudetyp) – Schätzung bleibt bewusst manuell pro Projekt.
 
@@ -129,6 +129,8 @@ Wichtig: In dieser Phase wird noch **kein** funktionierendes System gebaut, sond
 4. **ROI-Rechnung** – Gegenüberstellung von Kosten und Nutzen (z. B. eingesparte manuelle Aufwände, vermiedene verpasste Rechnungen) für die Entscheidung des Kunden.
 
 Punkte 3 und 4 sind eine bewusste Ergänzung zum Gesprächsstand (im Transkript war nur allgemein von einer "groben Preisschätzung" die Rede) und wurden am 2026-09-21 zusätzlich als Scope für dieses Angebot festgelegt.
+
+**Angebotsstruktur (Entscheidung 2026-09-21):** Das Angebot bekommt zwei Ebenen — Kernaufwand (alles aus Abschnitt 4 außer 4.10) für die Kalkulation, plus einen separat ausgewiesenen **optionalen Zusatzposten "Sprachassistent"**, den der Kunde bei Bedarf zubuchen kann. Er fließt nicht in die Kern-Aufwandsschätzung/den Kern-Stundenaufwand ein.
 
 ## 7. Vereinbarte nächste Schritte (aus dem Gespräch)
 
