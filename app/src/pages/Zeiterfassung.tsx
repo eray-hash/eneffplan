@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Badge } from '../components/ui/Badge'
 import { Card, CardHeader } from '../components/ui/Card'
+import { useTasks } from '../context/TasksContext'
 import { useTracking } from '../context/TrackingContext'
-import { projects, tasks } from '../data/mockData'
+import { projects } from '../data/mockData'
 
 export function Zeiterfassung() {
+  const { tasks } = useTasks()
   const { clockState, activeTaskId, clockIn, clockOut, togglePause } = useTracking()
   const activeTask = tasks.find((t) => t.id === activeTaskId)
   const activeProject = activeTask ? projects.find((p) => p.id === activeTask.projectId) : undefined
@@ -25,7 +27,7 @@ export function Zeiterfassung() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="text-xs font-medium text-slate-500">Status</div>
               <div className="mt-1 flex items-center gap-2">
@@ -33,9 +35,12 @@ export function Zeiterfassung() {
                 {clockState !== 'gestoppt' && <span className="text-sm text-slate-400">seit 08:42</span>}
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {clockState === 'gestoppt' && (
-                <button onClick={clockIn} className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700">
+                <button
+                  onClick={clockIn}
+                  className="min-h-10 rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
+                >
                   Einstempeln
                 </button>
               )}
@@ -43,13 +48,13 @@ export function Zeiterfassung() {
                 <>
                   <button
                     onClick={togglePause}
-                    className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600"
+                    className="min-h-10 rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600"
                   >
                     Pause
                   </button>
                   <button
                     onClick={clockOut}
-                    className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300"
+                    className="min-h-10 rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300"
                   >
                     Ausstempeln
                   </button>
@@ -58,7 +63,7 @@ export function Zeiterfassung() {
               {clockState === 'pause' && (
                 <button
                   onClick={togglePause}
-                  className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
+                  className="min-h-10 rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
                 >
                   Fortsetzen
                 </button>
@@ -71,7 +76,7 @@ export function Zeiterfassung() {
             {clockState === 'gestoppt' ? (
               <p className="text-sm text-slate-400">Noch nicht eingestempelt.</p>
             ) : activeTask && activeProject ? (
-              <div className="flex items-center justify-between rounded-lg border border-brand-200 bg-brand-50 px-3.5 py-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-brand-200 bg-brand-50 px-3.5 py-3">
                 <div>
                   <div className="text-sm font-medium text-slate-800">{activeTask.title}</div>
                   <div className="text-xs text-slate-500">

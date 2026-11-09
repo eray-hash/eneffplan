@@ -1,5 +1,6 @@
 import { Card, CardHeader } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
+import { useTasks } from '../context/TasksContext'
 import { employees, remainingHours } from '../data/mockData'
 
 function weeklyProjection(weeklyHours: number, committedHours: number, weeks: number) {
@@ -14,8 +15,9 @@ function weeklyProjection(weeklyHours: number, committedHours: number, weeks: nu
 }
 
 export function Kapazitaet() {
+  const { tasks } = useTasks()
   const rows = employees.map((e) => {
-    const committed = remainingHours(e.id)
+    const committed = remainingHours(e.id, tasks)
     const weeksOfBacklog = e.weeklyHours > 0 ? Math.ceil(committed / e.weeklyHours) : 0
     const projection = weeklyProjection(e.weeklyHours, committed, 4)
     return { employee: e, committed, weeksOfBacklog, projection }
@@ -50,50 +52,66 @@ export function Kapazitaet() {
 
       <Card className="p-0">
         <div className="p-5 pb-0">
-          <CardHeader title="Auslastung je Mitarbeiter" subtitle="Gebuchte Stunden = offene + in Bearbeitung befindliche Aufgaben (Restaufwand)" />
+          <CardHeader
+            title="Auslastung je Mitarbeiter"
+            subtitle="Gebuchte Stunden = offene + in Bearbeitung befindliche Aufgaben (Restaufwand)"
+          />
         </div>
-        <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-slate-400">
-              <th className="px-5 py-3 font-medium">Mitarbeiter</th>
-              <th className="px-5 py-3 font-medium">Kapazität/Woche</th>
-              <th className="px-5 py-3 font-medium">Gebuchter Restaufwand</th>
-              <th className="px-5 py-3 font-medium">Rückstau</th>
-              <th className="px-5 py-3 font-medium">Nächste 4 Wochen</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(({ employee: e, committed, weeksOfBacklog, projection }) => (
-              <tr key={e.id} className="border-b border-slate-50 last:border-0">
-                <td className="px-5 py-3.5">
-                  <div className="flex items-center gap-3">
-                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold text-white ${e.color}`}>
-                      {e.initials}
-                    </div>
-                    <span className="font-medium text-slate-800">{e.name}</span>
-                  </div>
-                </td>
-                <td className="px-5 py-3.5 text-slate-600">{e.weeklyHours}h</td>
-                <td className="px-5 py-3.5 text-slate-600">{committed}h</td>
-                <td className="px-5 py-3.5">
-                  <span className={weeksOfBacklog > 3 ? 'font-medium text-rose-600' : weeksOfBacklog > 1 ? 'font-medium text-amber-600' : 'text-slate-500'}>
-                    {weeksOfBacklog === 0 ? 'frei' : `${weeksOfBacklog} Woche${weeksOfBacklog > 1 ? 'n' : ''}`}
-                  </span>
-                </td>
-                <td className="px-5 py-3.5">
-                  <div className="flex items-center gap-1.5">
-                    {projection.map((w, i) => (
-                      <div key={i} className="w-14">
-                        <ProgressBar value={(w.booked / e.weeklyHours) * 100} tone={w.free === 0 ? 'red' : w.booked === 0 ? 'green' : 'amber'} />
-                        <div className="mt-0.5 text-center text-[10px] text-slate-400">{w.free}h frei</div>
-                      </div>
-                    ))}
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left text-sm">
+            <thead>
+              <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-slate-400">
+                <th className="px-5 py-3 font-medium">Mitarbeiter</th>
+                <th className="px-5 py-3 font-medium">Kapazität/Woche</th>
+                <th className="px-5 py-3 font-medium">Gebuchter Restaufwand</th>
+                <th className="px-5 py-3 font-medium">Rückstau</th>
+                <th className="px-5 py-3 font-medium">Nächste 4 Wochen</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rows.map(({ employee: e, committed, weeksOfBacklog, projection }) => (
+                <tr key={e.id} className="border-b border-slate-50 last:border-0">
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center gap-3">
+                      <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold text-white ${e.color}`}>
+                        {e.initials}
+                      </div>
+                      <span className="font-medium text-slate-800">{e.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-5 py-3.5 text-slate-600">{e.weeklyHours}h</td>
+                  <td className="px-5 py-3.5 text-slate-600">{committed}h</td>
+                  <td className="px-5 py-3.5">
+                    <span
+                      className={
+                        weeksOfBacklog > 3
+                          ? 'font-medium text-rose-600'
+                          : weeksOfBacklog > 1
+                            ? 'font-medium text-amber-600'
+                            : 'text-slate-500'
+                      }
+                    >
+                      {weeksOfBacklog === 0 ? 'frei' : `${weeksOfBacklog} Woche${weeksOfBacklog > 1 ? 'n' : ''}`}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center gap-1.5">
+                      {projection.map((w, i) => (
+                        <div key={i} className="w-14">
+                          <ProgressBar
+                            value={(w.booked / e.weeklyHours) * 100}
+                            tone={w.free === 0 ? 'red' : w.booked === 0 ? 'green' : 'amber'}
+                          />
+                          <div className="mt-0.5 text-center text-[10px] text-slate-400">{w.free}h frei</div>
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Card>
     </div>
   )

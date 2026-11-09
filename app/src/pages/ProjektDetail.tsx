@@ -3,14 +3,15 @@ import { Badge } from '../components/ui/Badge'
 import { Card, CardHeader } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { useRole } from '../context/RoleContext'
+import { useTasks } from '../context/TasksContext'
 import {
   employees,
   invoices,
+  effectiveMilestoneStatus,
   milestones,
   projectHours,
   projectMargin,
   projects,
-  tasks,
   type MilestoneStatus,
   type TaskStatus,
 } from '../data/mockData'
@@ -34,6 +35,7 @@ const currency = (n: number) => n.toLocaleString('de-DE', { style: 'currency', c
 export function ProjektDetail() {
   const { id } = useParams()
   const { role } = useRole()
+  const { tasks } = useTasks()
   const project = projects.find((p) => p.id === id)
 
   if (!project) {
@@ -48,9 +50,9 @@ export function ProjektDetail() {
   }
 
   const projectMilestones = milestones.filter((m) => m.projectId === project.id)
-  const hours = projectHours(project.id)
+  const hours = projectHours(project.id, tasks)
   const hoursPercent = hours.budget > 0 ? Math.round((hours.used / hours.budget) * 100) : 0
-  const margin = projectMargin(project)
+  const margin = projectMargin(project, tasks)
   const projectInvoices = invoices.filter((i) => i.projectId === project.id)
 
   return (
@@ -58,7 +60,7 @@ export function ProjektDetail() {
       <Link to="/projekte" className="text-sm text-slate-400 hover:text-slate-600">
         ← Zurück zur Projektübersicht
       </Link>
-      <div className="mt-2 flex items-start justify-between">
+      <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-xl font-semibold text-slate-900">
             #{project.number} · {project.customerName}
@@ -81,12 +83,12 @@ export function ProjektDetail() {
             <ul className="space-y-3">
               {projectMilestones.map((m) => {
                 const milestoneTasks = tasks.filter((t) => t.milestoneId === m.id)
-                const allDone = milestoneTasks.length > 0 && milestoneTasks.every((t) => t.status === 'erledigt')
+                const status = effectiveMilestoneStatus(m, tasks)
                 return (
                   <li key={m.id} className="rounded-lg border border-slate-100 p-3.5">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="text-sm font-medium text-slate-800">{m.title}</div>
-                      <Badge tone={milestoneTone[m.status]}>{milestoneStatusLabel[m.status]}</Badge>
+                      <Badge tone={milestoneTone[status]}>{milestoneStatusLabel[status]}</Badge>
                     </div>
                     <div className="mt-1 text-xs text-slate-400">
                       {m.invoicePercent}% der Angebotssumme = {currency((project.offerAmount * m.invoicePercent) / 100)}
@@ -95,14 +97,14 @@ export function ProjektDetail() {
                       {milestoneTasks.map((t) => {
                         const assignee = employees.find((e) => e.id === t.assigneeId)!
                         return (
-                          <li key={t.id} className="flex items-center gap-3 text-sm">
+                          <li key={t.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
                             <div
                               className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold text-white ${assignee.color}`}
                             >
                               {assignee.initials}
                             </div>
-                            <span className="flex-1 text-slate-600">{t.title}</span>
-                            <span className="w-24 shrink-0 text-right text-xs text-slate-400">
+                            <span className="min-w-0 flex-1 basis-40 text-slate-600">{t.title}</span>
+                            <span className="shrink-0 text-xs text-slate-400 sm:w-24 sm:text-right">
                               {t.usedHours}h / {t.budgetHours}h
                             </span>
                             <Badge tone={t.status === 'erledigt' ? 'green' : t.status === 'in_bearbeitung' ? 'blue' : 'neutral'}>
@@ -112,8 +114,8 @@ export function ProjektDetail() {
                         )
                       })}
                     </ul>
-                    {allDone && m.status !== 'bezahlt' && m.status !== 'rechnung_gestellt' && (
-                      <button className="mt-3 w-full rounded-md bg-brand-600 py-2 text-xs font-medium text-white hover:bg-brand-700">
+                    {status === 'erreicht' && (
+                      <button className="mt-3 min-h-10 w-full rounded-md bg-brand-600 py-2 text-xs font-medium text-white hover:bg-brand-700">
                         Alle Aufgaben erledigt — Rechnung freigeben ({m.invoicePercent}%)
                       </button>
                     )}
@@ -130,7 +132,10 @@ export function ProjektDetail() {
             ) : (
               <ul className="space-y-2">
                 {projectInvoices.map((inv) => (
-                  <li key={inv.id} className="flex items-center justify-between rounded-lg border border-slate-100 px-3 py-2 text-sm">
+                  <li
+                    key={inv.id}
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-100 px-3 py-2 text-sm"
+                  >
                     <span className="text-slate-600">
                       {currency(inv.amount)} · fällig {inv.dueOn}
                     </span>

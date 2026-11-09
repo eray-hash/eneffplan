@@ -144,7 +144,7 @@ export const milestones: Milestone[] = [
   { id: 'm238-3', projectId: 'p238', title: 'Förderbescheid + Abschluss', invoicePercent: 30, status: 'offen' },
 
   { id: 'm255-1', projectId: 'p255', title: 'Ist-Analyse Gebäudebestand', invoicePercent: 30, status: 'erreicht' },
-  { id: 'm255-2', projectId: 'p255', title: 'Maßnahmenkatalog', invoicePercent: 40, status: 'in_bearbeitung' as MilestoneStatus },
+  { id: 'm255-2', projectId: 'p255', title: 'Maßnahmenkatalog', invoicePercent: 40, status: 'offen' },
   { id: 'm255-3', projectId: 'p255', title: 'Abschlussbericht', invoicePercent: 30, status: 'offen' },
 
   { id: 'm251-1', projectId: 'p251', title: 'Wärmeschutznachweis komplett', invoicePercent: 100, status: 'bezahlt' },
@@ -157,7 +157,7 @@ export const tasks: SubTask[] = [
     projectId: 'p260',
     title: 'Gebäudemodell (3D) aufbauen',
     assigneeId: 'e1',
-    milestoneId: 'm260-2',
+    milestoneId: 'm260-1',
     budgetHours: 40,
     usedHours: 40,
     status: 'erledigt',
@@ -167,7 +167,7 @@ export const tasks: SubTask[] = [
     projectId: 'p260',
     title: 'U-Werte / Bauteile erfassen',
     assigneeId: 'e1',
-    milestoneId: 'm260-2',
+    milestoneId: 'm260-1',
     budgetHours: 20,
     usedHours: 22,
     status: 'erledigt',
@@ -179,8 +179,8 @@ export const tasks: SubTask[] = [
     assigneeId: 'e3',
     milestoneId: 'm260-2',
     budgetHours: 30,
-    usedHours: 18,
-    status: 'in_bearbeitung',
+    usedHours: 30,
+    status: 'erledigt',
   },
   {
     id: 't4',
@@ -189,8 +189,8 @@ export const tasks: SubTask[] = [
     assigneeId: 'e3',
     milestoneId: 'm260-2',
     budgetHours: 20,
-    usedHours: 0,
-    status: 'offen',
+    usedHours: 20,
+    status: 'erledigt',
   },
   {
     id: 't5',
@@ -201,6 +201,16 @@ export const tasks: SubTask[] = [
     budgetHours: 15,
     usedHours: 0,
     status: 'offen',
+  },
+  {
+    id: 't15',
+    projectId: 'p260',
+    title: 'Prüfung & Freigabe Bericht',
+    assigneeId: 'e3',
+    milestoneId: 'm260-3',
+    budgetHours: 12,
+    usedHours: 4,
+    status: 'in_bearbeitung',
   },
 
   {
@@ -301,8 +311,8 @@ export const invoices: Invoice[] = [
   { id: 'i1', projectId: 'p260', milestoneId: 'm260-1', amount: 5550, status: 'bezahlt', issuedOn: '2026-06-10', dueOn: '2026-06-24' },
   { id: 'i2', projectId: 'p260', milestoneId: 'm260-2', amount: 7400, status: 'mahnung_1', issuedOn: '2026-08-20', dueOn: '2026-09-03' },
   { id: 'i3', projectId: 'p244', milestoneId: 'm244-1', amount: 8000, status: 'versendet', issuedOn: '2026-09-05', dueOn: '2026-09-19' },
-  { id: 'i4', projectId: 'p251', milestoneId: 'm260-1', amount: 6400, status: 'bezahlt', issuedOn: '2026-08-11', dueOn: '2026-08-25' },
-  { id: 'i5', projectId: 'p219', milestoneId: 'm260-1', amount: 5200, status: 'mahnung_3', issuedOn: '2026-05-02', dueOn: '2026-05-16' },
+  { id: 'i4', projectId: 'p251', milestoneId: 'm251-1', amount: 6400, status: 'bezahlt', issuedOn: '2026-08-11', dueOn: '2026-08-25' },
+  { id: 'i5', projectId: 'p219', milestoneId: 'm219-1', amount: 5200, status: 'mahnung_3', issuedOn: '2026-05-02', dueOn: '2026-05-16' },
 ]
 
 export type AbsenceType = 'urlaub' | 'krank' | 'sonderurlaub'
@@ -315,33 +325,63 @@ export interface Absence {
   type: AbsenceType
 }
 
+export function toIsoLocal(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+export function startOfToday() {
+  const now = new Date()
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate())
+}
+
+function mondayOfThisWeek() {
+  const d = startOfToday()
+  const day = d.getDay()
+  d.setDate(d.getDate() + (day === 0 ? -6 : 1 - day))
+  return d
+}
+
+function inDays(offset: number) {
+  const d = mondayOfThisWeek()
+  d.setDate(d.getDate() + offset)
+  return toIsoLocal(d)
+}
+
+// Demo-Abwesenheiten liegen relativ zur aktuellen Woche, damit der Kalender immer sinnvolle Beispiele zeigt
 export const absences: Absence[] = [
-  { id: 'a1', employeeId: 'e1', from: '2026-09-28', to: '2026-10-02', type: 'urlaub' },
-  { id: 'a2', employeeId: 'e3', from: '2026-09-22', to: '2026-09-22', type: 'krank' },
-  { id: 'a3', employeeId: 'e5', from: '2026-10-05', to: '2026-10-09', type: 'urlaub' },
+  { id: 'a1', employeeId: 'e1', from: inDays(7), to: inDays(11), type: 'urlaub' },
+  { id: 'a2', employeeId: 'e3', from: inDays(8), to: inDays(8), type: 'krank' },
+  { id: 'a3', employeeId: 'e5', from: inDays(14), to: inDays(18), type: 'urlaub' },
 ]
 
-export function remainingHours(employeeId: string) {
-  return tasks
+export function remainingHours(employeeId: string, taskList: SubTask[] = tasks) {
+  return taskList
     .filter((t) => t.assigneeId === employeeId && t.status !== 'erledigt')
     .reduce((sum, t) => sum + Math.max(0, t.budgetHours - t.usedHours), 0)
 }
 
-export function projectProgress(projectId: string) {
+// Offene/erreichte Meilensteine folgen dem Stand ihrer Aufgaben; abgerechnete bleiben fix
+export function effectiveMilestoneStatus(m: Milestone, taskList: SubTask[] = tasks): MilestoneStatus {
+  if (m.status !== 'offen' && m.status !== 'erreicht') return m.status
+  const ts = taskList.filter((t) => t.milestoneId === m.id)
+  return ts.length > 0 && ts.every((t) => t.status === 'erledigt') ? 'erreicht' : 'offen'
+}
+
+export function projectProgress(projectId: string, taskList: SubTask[] = tasks) {
   const ms = milestones.filter((m) => m.projectId === projectId)
-  const done = ms.filter((m) => m.status === 'rechnung_gestellt' || m.status === 'bezahlt' || m.status === 'erreicht').length
+  const done = ms.filter((m) => effectiveMilestoneStatus(m, taskList) !== 'offen').length
   return { done, total: ms.length }
 }
 
-export function projectHours(projectId: string) {
-  const ts = tasks.filter((t) => t.projectId === projectId)
+export function projectHours(projectId: string, taskList: SubTask[] = tasks) {
+  const ts = taskList.filter((t) => t.projectId === projectId)
   const used = ts.reduce((sum, t) => sum + t.usedHours, 0)
   const budget = ts.reduce((sum, t) => sum + t.budgetHours, 0)
   return { used, budget }
 }
 
-export function projectMargin(project: Project) {
-  const ts = tasks.filter((t) => t.projectId === project.id)
+export function projectMargin(project: Project, taskList: SubTask[] = tasks) {
+  const ts = taskList.filter((t) => t.projectId === project.id)
   const cost = ts.reduce((sum, t) => {
     const emp = employees.find((e) => e.id === t.assigneeId)
     return sum + t.usedHours * (emp?.hourlyCostRate ?? 0)

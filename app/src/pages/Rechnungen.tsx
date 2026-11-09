@@ -38,13 +38,16 @@ export function Rechnungen() {
             {overdue.map((inv) => {
               const project = projects.find((p) => p.id === inv.projectId)!
               return (
-                <li key={inv.id} className="flex items-center justify-between rounded-lg bg-white px-3.5 py-2.5 text-sm">
+                <li
+                  key={inv.id}
+                  className="flex flex-col gap-2 rounded-lg bg-white px-3.5 py-2.5 text-sm sm:flex-row sm:items-center sm:justify-between"
+                >
                   <span>
                     #{project.number} · {project.customerName} — {currency(inv.amount)}, fällig seit {inv.dueOn}
                   </span>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge tone={statusTone[inv.status]}>{statusLabel[inv.status]}</Badge>
-                    <button className="rounded-md bg-rose-600 px-3 py-1 text-xs font-medium text-white hover:bg-rose-700">
+                    <button className="min-h-9 rounded-md bg-rose-600 px-3 py-1 text-xs font-medium text-white hover:bg-rose-700">
                       Nächste Mahnstufe senden
                     </button>
                   </div>
@@ -56,35 +59,37 @@ export function Rechnungen() {
       )}
 
       <Card className="p-0">
-        <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-slate-400">
-              <th className="px-5 py-3 font-medium">Projekt</th>
-              <th className="px-5 py-3 font-medium">Betrag</th>
-              <th className="px-5 py-3 font-medium">Versendet</th>
-              <th className="px-5 py-3 font-medium">Fällig</th>
-              <th className="px-5 py-3 font-medium">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoices.map((inv) => {
-              const project = projects.find((p) => p.id === inv.projectId)!
-              return (
-                <tr key={inv.id} className="border-b border-slate-50 last:border-0">
-                  <td className="px-5 py-3.5 font-medium text-slate-800">
-                    #{project.number} · {project.customerName}
-                  </td>
-                  <td className="px-5 py-3.5 text-slate-600">{currency(inv.amount)}</td>
-                  <td className="px-5 py-3.5 text-slate-500">{inv.issuedOn}</td>
-                  <td className="px-5 py-3.5 text-slate-500">{inv.dueOn}</td>
-                  <td className="px-5 py-3.5">
-                    <Badge tone={statusTone[inv.status]}>{statusLabel[inv.status]}</Badge>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[560px] text-left text-sm">
+            <thead>
+              <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-slate-400">
+                <th className="px-5 py-3 font-medium">Projekt</th>
+                <th className="px-5 py-3 font-medium">Betrag</th>
+                <th className="px-5 py-3 font-medium">Versendet</th>
+                <th className="px-5 py-3 font-medium">Fällig</th>
+                <th className="px-5 py-3 font-medium">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {invoices.map((inv) => {
+                const project = projects.find((p) => p.id === inv.projectId)!
+                return (
+                  <tr key={inv.id} className="border-b border-slate-50 last:border-0">
+                    <td className="px-5 py-3.5 font-medium text-slate-800">
+                      #{project.number} · {project.customerName}
+                    </td>
+                    <td className="px-5 py-3.5 text-slate-600">{currency(inv.amount)}</td>
+                    <td className="px-5 py-3.5 text-slate-500">{inv.issuedOn}</td>
+                    <td className="px-5 py-3.5 text-slate-500">{inv.dueOn}</td>
+                    <td className="px-5 py-3.5">
+                      <Badge tone={statusTone[inv.status]}>{statusLabel[inv.status]}</Badge>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
       </Card>
     </div>
   )

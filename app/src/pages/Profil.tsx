@@ -74,30 +74,33 @@ export function Profil() {
             ))}
             {myAbsences.length === 0 && <p className="text-sm text-slate-400">Keine Abwesenheiten eingetragen.</p>}
           </ul>
-          <div className="grid grid-cols-3 gap-2 border-t border-slate-100 pt-4">
+          <div className="grid grid-cols-1 gap-2 border-t border-slate-100 pt-4 sm:grid-cols-3">
             <input
               type="date"
               value={form.from}
               onChange={(e) => setForm((f) => ({ ...f, from: e.target.value }))}
-              className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm"
+              className="min-h-10 rounded-lg border border-slate-200 px-2 py-1.5 text-sm"
             />
             <input
               type="date"
               value={form.to}
               onChange={(e) => setForm((f) => ({ ...f, to: e.target.value }))}
-              className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm"
+              className="min-h-10 rounded-lg border border-slate-200 px-2 py-1.5 text-sm"
             />
             <select
               value={form.type}
               onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as AbsenceType }))}
-              className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm"
+              className="min-h-10 rounded-lg border border-slate-200 px-2 py-1.5 text-sm"
             >
               <option value="urlaub">Urlaub</option>
               <option value="krank">Krank</option>
               <option value="sonderurlaub">Sonderurlaub</option>
             </select>
           </div>
-          <button onClick={addAbsence} className="mt-3 w-full rounded-lg bg-brand-600 py-2 text-sm font-medium text-white hover:bg-brand-700">
+          <button
+            onClick={addAbsence}
+            className="mt-3 min-h-10 w-full rounded-lg bg-brand-600 py-2 text-sm font-medium text-white hover:bg-brand-700"
+          >
             Abwesenheit eintragen
           </button>
         </Card>

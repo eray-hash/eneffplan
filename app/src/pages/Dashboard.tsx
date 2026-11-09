@@ -3,17 +3,19 @@ import { Badge } from '../components/ui/Badge'
 import { Card, CardHeader } from '../components/ui/Card'
 import { ProgressBar } from '../components/ui/ProgressBar'
 import { useRole } from '../context/RoleContext'
+import { useTasks } from '../context/TasksContext'
 import { useTracking } from '../context/TrackingContext'
-import { employees, invoices, milestones, projects, tasks } from '../data/mockData'
+import { effectiveMilestoneStatus, employees, invoices, milestones, projects, remainingHours } from '../data/mockData'
 
 const currency = (n: number) => n.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
 
 function GeschaeftsfuehrungDashboard() {
+  const { tasks } = useTasks()
   const activeProjects = projects.filter((p) => p.status === 'aktiv')
   const followUps = projects.filter((p) => p.nextFollowUp)
   const openInvoices = invoices.filter((i) => i.status !== 'bezahlt')
   const openInvoiceSum = openInvoices.reduce((sum, i) => sum + i.amount, 0)
-  const dueMilestones = milestones.filter((m) => m.status === 'erreicht')
+  const dueMilestones = milestones.filter((m) => effectiveMilestoneStatus(m, tasks) === 'erreicht')
 
   return (
     <div className="space-y-6">
@@ -50,14 +52,14 @@ function GeschaeftsfuehrungDashboard() {
             {dueMilestones.map((m) => {
               const project = projects.find((p) => p.id === m.projectId)!
               return (
-                <li key={m.id} className="flex items-center justify-between rounded-lg bg-brand-50 px-3 py-2.5">
+                <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-brand-50 px-3 py-2.5">
                   <div>
                     <div className="text-sm font-medium text-slate-800">
                       #{project.number} · {m.title}
                     </div>
                     <div className="text-xs text-slate-500">{project.customerName}</div>
                   </div>
-                  <button className="rounded-md bg-brand-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-700">
+                  <button className="min-h-9 rounded-md bg-brand-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-700">
                     Rechnung erstellen ({m.invoicePercent}%)
                   </button>
                 </li>
@@ -71,7 +73,7 @@ function GeschaeftsfuehrungDashboard() {
           <ul className="space-y-3">
             {followUps.map((p) => (
               <li key={p.id} className="rounded-lg border border-slate-100 px-3 py-2.5">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="text-sm font-medium text-slate-800">
                     #{p.number} · {p.customerName}
                   </div>
@@ -91,21 +93,20 @@ function GeschaeftsfuehrungDashboard() {
         <CardHeader title="Auslastung Team (diese Woche)" subtitle="Geplante Stunden je Mitarbeiter:in vs. Wochenkapazität" />
         <div className="space-y-3">
           {employees.map((e) => {
-            const plannedTasks = tasks.filter((t) => t.assigneeId === e.id && t.status !== 'erledigt')
-            const planned = plannedTasks.reduce((sum, t) => sum + (t.budgetHours - t.usedHours), 0)
+            const planned = remainingHours(e.id, tasks)
             const percent = Math.min(100, Math.round((planned / e.weeklyHours) * 100))
             return (
-              <div key={e.id} className="flex items-center gap-4">
+              <div key={e.id} className="flex items-center gap-3 sm:gap-4">
                 <div
                   className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ${e.color}`}
                 >
                   {e.initials}
                 </div>
-                <div className="w-36 shrink-0 text-sm text-slate-700">{e.name}</div>
+                <div className="w-24 shrink-0 truncate text-sm text-slate-700 sm:w-36">{e.name}</div>
                 <div className="flex-1">
                   <ProgressBar value={percent} tone={percent > 90 ? 'red' : percent > 60 ? 'amber' : 'green'} />
                 </div>
-                <div className="w-24 shrink-0 text-right text-xs text-slate-500">
+                <div className="w-20 shrink-0 text-right text-xs text-slate-500 sm:w-24">
                   {planned}h / {e.weeklyHours}h
                 </div>
               </div>
@@ -118,6 +119,7 @@ function GeschaeftsfuehrungDashboard() {
 }
 
 function MitarbeiterDashboard() {
+  const { tasks } = useTasks()
   const me = employees[0]
   const myTasks = tasks.filter((t) => t.assigneeId === me.id)
   const openTasks = myTasks.filter((t) => t.status !== 'erledigt')
@@ -127,7 +129,7 @@ function MitarbeiterDashboard() {
   return (
     <div className="space-y-6">
       <Card className="bg-brand-600 text-white">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="text-sm text-brand-100">Guten Tag, {me.name.split(' ')[0]}</div>
             <div className="mt-1 text-lg font-semibold">
@@ -158,7 +160,7 @@ function MitarbeiterDashboard() {
             const percent = Math.round((t.usedHours / t.budgetHours) * 100)
             return (
               <li key={t.id} className="rounded-lg border border-slate-100 px-3 py-3">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="text-sm font-medium text-slate-800">{t.title}</div>
                   <Badge tone={t.status === 'in_bearbeitung' ? 'blue' : 'neutral'}>
                     {t.status === 'in_bearbeitung' ? 'In Bearbeitung' : 'Offen'}

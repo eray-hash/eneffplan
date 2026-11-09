@@ -1,11 +1,13 @@
 import { Card, CardHeader } from '../components/ui/Card'
+import { useTasks } from '../context/TasksContext'
 import { projectMargin, projects } from '../data/mockData'
 
 const currency = (n: number) => n.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
 
 export function Controlling() {
+  const { tasks } = useTasks()
   const totalOffer = projects.reduce((sum, p) => sum + p.offerAmount, 0)
-  const totalCost = projects.reduce((sum, p) => sum + projectMargin(p).cost, 0)
+  const totalCost = projects.reduce((sum, p) => sum + projectMargin(p, tasks).cost, 0)
   const totalMargin = totalOffer - totalCost
 
   const pipeline = [
@@ -49,7 +51,7 @@ export function Controlling() {
             </thead>
             <tbody>
               {projects.map((p) => {
-                const m = projectMargin(p)
+                const m = projectMargin(p, tasks)
                 return (
                   <tr key={p.id} className="border-t border-slate-50">
                     <td className="py-2 text-slate-700">#{p.number}</td>

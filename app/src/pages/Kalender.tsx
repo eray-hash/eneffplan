@@ -1,14 +1,24 @@
 import { useMemo, useState } from 'react'
 import { Card, CardHeader } from '../components/ui/Card'
 import { useRole } from '../context/RoleContext'
-import { absences, employees, projects, tasks, type AbsenceType } from '../data/mockData'
+import { useTasks } from '../context/TasksContext'
+import { absences, employees, projects, startOfToday, toIsoLocal, type AbsenceType, type SubTask } from '../data/mockData'
 
 const DAILY_CAPACITY = 8
-const TODAY = new Date('2026-09-21')
 
 const absenceLabel: Record<AbsenceType, string> = { urlaub: 'Urlaub', krank: 'Krank', sonderurlaub: 'Sonderurlaub' }
-const absenceColor: Record<AbsenceType, string> = { urlaub: 'bg-sky-100 text-sky-700', krank: 'bg-rose-100 text-rose-700', sonderurlaub: 'bg-violet-100 text-violet-700' }
-const taskColors = ['bg-brand-100 text-brand-800', 'bg-amber-100 text-amber-800', 'bg-slate-200 text-slate-700', 'bg-sky-100 text-sky-800', 'bg-violet-100 text-violet-800']
+const absenceColor: Record<AbsenceType, string> = {
+  urlaub: 'bg-sky-100 text-sky-700',
+  krank: 'bg-rose-100 text-rose-700',
+  sonderurlaub: 'bg-violet-100 text-violet-700',
+}
+const taskColors = [
+  'bg-brand-100 text-brand-800',
+  'bg-amber-100 text-amber-800',
+  'bg-slate-200 text-slate-700',
+  'bg-sky-100 text-sky-800',
+  'bg-violet-100 text-violet-800',
+]
 
 function nextWorkdays(from: Date, count: number) {
   const days: Date[] = []
@@ -20,23 +30,18 @@ function nextWorkdays(from: Date, count: number) {
   return days
 }
 
-function isoDate(d: Date) {
-  return d.toISOString().slice(0, 10)
-}
-
-function buildSchedule(employeeId: string) {
-  const workdays = nextWorkdays(TODAY, 10)
+function buildSchedule(employeeId: string, taskList: SubTask[]) {
+  const workdays = nextWorkdays(startOfToday(), 10)
   const myAbsences = absences.filter((a) => a.employeeId === employeeId)
-  const openTasks = tasks
+  const queue = taskList
     .filter((t) => t.assigneeId === employeeId && t.status !== 'erledigt')
     .map((t) => ({ ...t, remaining: Math.max(0, t.budgetHours - t.usedHours) }))
     .filter((t) => t.remaining > 0)
     // "In Bearbeitung" wird zuerst verplant, danach der Rest aus dem Backlog
     .sort((a, b) => (a.status === b.status ? 0 : a.status === 'in_bearbeitung' ? -1 : 1))
 
-  const queue = openTasks.map((t) => ({ ...t }))
   const days = workdays.map((date) => {
-    const iso = isoDate(date)
+    const iso = toIsoLocal(date)
     const absence = myAbsences.find((a) => iso >= a.from && iso <= a.to)
     const blocks: { taskId: string; title: string; hours: number; projectNumber: string }[] = []
     let free = absence ? 0 : DAILY_CAPACITY
@@ -59,9 +64,10 @@ function buildSchedule(employeeId: string) {
 
 export function Kalender() {
   const { role } = useRole()
+  const { tasks } = useTasks()
   const [employeeId, setEmployeeId] = useState(employees[0].id)
   const activeEmployeeId = role === 'mitarbeiter' ? employees[0].id : employeeId
-  const { days, unscheduledHours } = useMemo(() => buildSchedule(activeEmployeeId), [activeEmployeeId])
+  const { days, unscheduledHours } = useMemo(() => buildSchedule(activeEmployeeId, tasks), [activeEmployeeId, tasks])
   const employee = employees.find((e) => e.id === activeEmployeeId)!
 
   const taskColorMap = useMemo(() => {
@@ -79,8 +85,11 @@ export function Kalender() {
 
       {role === 'geschaeftsfuehrung' && (
         <div className="mb-4 flex items-center gap-2">
-          <label className="text-xs font-medium text-slate-500">Mitarbeiter:</label>
+          <label htmlFor="kalender-employee" className="text-xs font-medium text-slate-500">
+            Mitarbeiter:
+          </label>
           <select
+            id="kalender-employee"
             value={employeeId}
             onChange={(e) => setEmployeeId(e.target.value)}
             className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm text-slate-700"
@@ -97,11 +106,15 @@ export function Kalender() {
       <Card>
         <CardHeader
           title={`${employee.name} — nächste zwei Wochen`}
-          subtitle={unscheduledHours > 0 ? `${unscheduledHours}h passen nicht mehr in die nächsten zwei Wochen (Kapazität ausgeschöpft)` : 'Alle offenen Aufgaben passen in die nächsten zwei Wochen'}
+          subtitle={
+            unscheduledHours > 0
+              ? `${unscheduledHours}h passen nicht mehr in die nächsten zwei Wochen (Kapazität ausgeschöpft)`
+              : 'Alle offenen Aufgaben passen in die nächsten zwei Wochen'
+          }
         />
-        <div className="grid grid-cols-5 gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
           {days.map((day) => (
-            <div key={day.iso} className="min-h-[160px] rounded-lg border border-slate-100 p-2">
+            <div key={day.iso} className="min-h-[120px] rounded-lg border border-slate-100 p-2 lg:min-h-[160px]">
               <div className="mb-2 text-[11px] font-medium uppercase tracking-wide text-slate-400">
                 {day.date.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit' })}
               </div>
